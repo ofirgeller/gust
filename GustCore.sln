@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GustPersist", "GustPersist\GustPersist.csproj", "{894032E6-5779-4FA0-B8CA-AE3A107D8919}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GustPersistEFC", "GustPersistEFC\GustPersistEFC.csproj", "{E555B180-36AD-4043-9BCC-7132405D4657}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GustEfcConsumer", "GustEfcConsumer\GustEfcConsumer.csproj", "{7A6CA1D0-66B2-4092-B15A-9B23E1A2DF08}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{8BCA0451-A80F-4341-B410-18BF152AE731}"
+	ProjectSection(SolutionItems) = preProject
+		Package.nuspec = Package.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
