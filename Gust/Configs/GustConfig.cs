@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Gust
+namespace Gust.Configs
 {
     /// <summary>
     /// TODO: check that we actualy respect these settings 
@@ -78,9 +78,9 @@ namespace Gust
         /// Returns TransactionSettings.Default.  Override to return different settings.
         /// </summary>
         /// <returns></returns>
-        public virtual TransactionSettings GetTransactionSettings()
+        public virtual TransactionConfig GetTransactionSettings()
         {
-            return new TransactionSettings();
+            return new TransactionConfig();
         }
 
         JsonSerializerSettings _jsonSerializerSettings = null;

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Transactions;
 
-namespace Gust
+namespace Gust.Configs
 {
     /// <summary>
     /// TODO: check that we actualy respect these settings 
     /// </summary>
-    public class TransactionSettings
+    public class TransactionConfig
     {
         /// <summary>
         /// Create a TransactionSettings object using default settings.
@@ -17,7 +17,7 @@ namespace Gust
         /// and <see cref="TransactionType"/> to TransactionType.None (which means the other settings have no effect).  
         /// These settings are not Breeze requirements and can be changed using the appropriate constructor or setter.
         /// </remarks>
-        public TransactionSettings()
+        public TransactionConfig()
         {
             IsolationLevel = IsolationLevel.ReadCommitted;
             Timeout = TransactionManager.DefaultTimeout;
@@ -30,7 +30,7 @@ namespace Gust
         /// <remarks>
         /// Note that IsolationLevel and Timeout have no affect if TransactionType is None.
         /// </remarks>
-        public TransactionSettings(IsolationLevel isolationLevel, TimeSpan timeout, TransactionType transactionType)
+        public TransactionConfig(IsolationLevel isolationLevel, TimeSpan timeout, TransactionType transactionType)
         {
             IsolationLevel = isolationLevel;
             Timeout = timeout;

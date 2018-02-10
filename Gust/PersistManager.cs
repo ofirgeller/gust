@@ -1,4 +1,5 @@
-﻿using Gust.Keys;
+﻿using Gust.Configs;
+using Gust.Keys;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
@@ -254,7 +255,6 @@ namespace Gust
 
                 /// Set temp keys to the default value
                 /// Add entities to the ctx
-
                 var defaultKeyValue = GetDefaultValue(pkPropInfo.PropertyType);
                 entityGroup.Entities.ForEach(ei =>
                 {
