@@ -251,7 +251,7 @@ namespace Gust.Metadata
 
                   return new NavigationPropertyMetadata
                   {
-                      Name = n.Name,
+                      Name = ToCamelCase(n.Name),
                       EntityTypeName = targetEntityType.Name,
                       IsScalar = isDependent,
                       ForeignKeyNames = foreignKeyNames,
