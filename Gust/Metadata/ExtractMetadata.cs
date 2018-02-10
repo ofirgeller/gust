@@ -194,6 +194,7 @@ namespace Gust.Metadata
         {
             var type = prop.ClrType;
             var nullable = prop.IsNullable ? true : default(bool?);
+            var isPartOfKey = prop.IsKey();
 
             var underliningType = Nullable.GetUnderlyingType(type);
 
@@ -225,6 +226,7 @@ namespace Gust.Metadata
                 IsNullable = nullable,
                 DefaultValue = defaultValue,
                 DataType = dataType,
+                IsPartOfKey = isPartOfKey
             };
         }
 
