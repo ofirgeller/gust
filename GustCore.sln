@@ -5,11 +5,6 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GustConsumer", "GustEfcConsumer\GustConsumer.csproj", "{7A6CA1D0-66B2-4092-B15A-9B23E1A2DF08}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{8BCA0451-A80F-4341-B410-18BF152AE731}"
-	ProjectSection(SolutionItems) = preProject
-		Package.nuspec = Package.nuspec
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gust", "Gust\Gust.csproj", "{C65D5DDB-42B9-4381-B762-E3DC8C590B9B}"
 EndProject
 Global
