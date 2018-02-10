@@ -5,7 +5,7 @@ namespace Gust
 {
     public static class EntityNameUtil
     {
-        public static string ShortTypeNameFromlongName(string longName)
+        public static string ShortTypeNameFromLongName(string longName)
         {
             return longName.Split('.').Last();
         }

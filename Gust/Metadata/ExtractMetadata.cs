@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Gust.EntityNameUtil;
@@ -80,7 +81,8 @@ namespace Gust.Metadata
             public object DefaultValue { get; set; }
 
             /// <summary>
-            /// Can this property be null. can be omitted if false.
+            /// This property should be set to null if it is false so that we omit it from the response we 
+            /// send the client.
             /// </summary>
             public bool? Nullable { get; set; }
 
@@ -191,28 +193,38 @@ namespace Gust.Metadata
         public static PropertyMetadata GetPropertyMetadata(IProperty prop)
         {
             var type = prop.ClrType;
-            var isEnum = type.IsEnum;
-            var numeric = TypeFns.IsNumericType(type);
             var nullable = prop.IsNullable ? true : default(bool?);
 
+            var underliningType = Nullable.GetUnderlyingType(type);
+
+            if (underliningType != null)
+            {
+                type = underliningType;
+            }
+
+            var isEnum = type.IsEnum;
+            var numeric = TypeFns.IsNumericType(type);
+
+            var dataType = isEnum ? "String" : ShortTypeNameFromLongName(type.Name);
+
             object defaultValue = null;
-            if (nullable == true && numeric)
+            if (nullable != true && numeric)
             {
                 defaultValue = 0;
             }
 
-            if (nullable == true && type == typeof(string))
+            if (nullable != true && type == typeof(string))
             {
                 defaultValue = "";
             }
-
+            
             return new PropertyMetadata
             {
                 Name = prop.Name,
-                EnumType = isEnum ? prop.ClrType.Name : null,
+                EnumType = isEnum ? type.Name : null,
                 Nullable = nullable,
                 DefaultValue = defaultValue,
-                DataType = isEnum ? "String" : ShortTypeNameFromlongName(prop.ClrType.Name),
+                DataType = dataType,
             };
         }
 
@@ -249,7 +261,7 @@ namespace Gust.Metadata
 
         public static TypeMetadata GetTypeMetadata(IEntityType type)
         {
-            var name = ShortTypeNameFromlongName(type.Name);
+            var name = ShortTypeNameFromLongName(type.Name);
 
             var properties = type.GetProperties().Select(p => GetPropertyMetadata(p)).ToArray();
             var navProperties = GetNavigationPropertiesMetadata(type);

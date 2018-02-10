@@ -27,7 +27,13 @@ namespace GustEfcConsumer.Model
 
         public int? UserId { get; set; }
 
-        public BlogSubject Subject { get; set; }
+        public BlogSubject? Subject { get; set; }
+
+        /// <summary>
+        /// Used to test our library handeling of nullable properties
+        /// story: This is a part of the old blog system. newer blogs do not have it, but we have to keep it for the old ones.
+        /// </summary>
+        public short? Code{ get; set; }
 
         public User User { get; set; }
 
