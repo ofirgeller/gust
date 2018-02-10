@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Gust.Keys;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -6,10 +7,6 @@ namespace Gust
 {
     public class EntityInfo
     {
-        protected internal EntityInfo()
-        {
-        }
-
         public EntitySetInfo EntitySetInfo { get; set; }
         public Type Type { get; set; }
         public object Entity { get; internal set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Gust.Keys;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -6,9 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using static GustEfc.Util;
+using static Gust.EntityNameUtil;
 
 namespace Gust
 {
@@ -217,12 +216,12 @@ namespace Gust
                   });
 
             var entityGroups = entitiesInfo.GroupBy(e => e.Type)
-                .Select(g => new EntityGroup() { EntityType = g.First().Type, Entities = g.ToList() })
+                .Select(g => new EntityGroup() { EntitiesClrType = g.First().Type, Entities = g.ToList() })
                 .ToList();
 
             var groupsToSave = entitySetsInfo.Select(esi =>
             {
-                var group = entityGroups.FirstOrDefault(eg => eg.EntityType == esi.ClrType);
+                var group = entityGroups.FirstOrDefault(eg => eg.EntitiesClrType == esi.ClrType);
                 return (esi, group);
             }).Where(i => i.group != null)
             .ToList();

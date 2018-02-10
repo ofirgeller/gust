@@ -10,7 +10,8 @@ using System.Text;
 namespace Gust
 {
     /// <summary>
-    /// A collection of static methods used to provide additional <see cref="System.Type"/> related services.
+    /// Functions to help discover types and create default values for them
+    /// TODO: Much here is not needed. in a few month if that does not change cleanup what we can. 
     /// </summary>
     public static class TypeFns
     {
@@ -106,7 +107,7 @@ namespace Gust
             return GetNumericTypeKind(type) == 3;
         }
 
-        private static int GetNumericTypeKind(Type type)
+        static int GetNumericTypeKind(Type type)
         {
             type = GetNonNullableType(type);
             if (type.GetTypeInfo().IsEnum)

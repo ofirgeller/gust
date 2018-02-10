@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Gust
+﻿namespace Gust.Errors
 {
     public class EntityError
     {

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Gust;
+﻿using Gust;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 
 namespace GustEfcConsumer
 {

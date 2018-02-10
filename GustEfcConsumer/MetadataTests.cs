@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using GustEfc.Metadata;
+using Gust.Metadata;
 using GustEfcConsumer.Model;
 using NUnit.Framework;
 using System;

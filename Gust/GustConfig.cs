@@ -1,9 +1,11 @@
-﻿using Gust;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Gust
 {
+    /// <summary>
+    /// TODO: check that we actualy respect these settings 
+    /// </summary>
     public class GustConfig
     {
         public static GustConfig Default { get; set; } = new GustConfig();

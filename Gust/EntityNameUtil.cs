@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace GustEfc
+namespace Gust
 {
-    public static class Util
+    public static class EntityNameUtil
     {
         public static string ShortTypeNameFromlongName(string longName)
         {

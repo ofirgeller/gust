@@ -1,5 +1,4 @@
-﻿
-namespace Gust
+﻿namespace Gust.Keys
 {
     public class EntityKey
     {

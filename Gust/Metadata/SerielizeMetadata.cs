@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace GustEfc.Metadata
+namespace Gust.Metadata
 {
     public class MetadataSerielizer
     {

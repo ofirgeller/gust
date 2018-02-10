@@ -3,6 +3,9 @@ using System.Transactions;
 
 namespace Gust
 {
+    /// <summary>
+    /// TODO: check that we actualy respect these settings 
+    /// </summary>
     public class TransactionSettings
     {
         /// <summary>

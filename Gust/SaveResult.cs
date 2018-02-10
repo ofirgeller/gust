@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Gust.Keys;
+using System.Collections.Generic;
 
 namespace Gust
 {
     /// <summary>
-    /// Types returned to javascript as Json.
+    /// The return type of the response sent to the client after a save request.
     /// </summary>
     public class SaveResult
     {

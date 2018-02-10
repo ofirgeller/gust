@@ -1,8 +1,5 @@
-﻿using FluentAssertions;
-using Gust;
-using GustEfcConsumer.Model;
+﻿using GustEfcConsumer.Model;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

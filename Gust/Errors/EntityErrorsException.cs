@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace Gust
+namespace Gust.Errors
 {
     public class EntityErrorsException : Exception
     {

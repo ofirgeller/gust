@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Gust.Keys;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Gust;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static GustEfc.Util;
+using static Gust.EntityNameUtil;
 
-namespace GustEfc.Metadata
+namespace Gust.Metadata
 {
     /// <summary>
     /// This extractor creates metadata with the schame the js breeze client uses. the docs say
