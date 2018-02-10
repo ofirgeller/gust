@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Gust.PersistEFC;
+using Gust;
 using GustEfcConsumer.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;

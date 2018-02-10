@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using GustEfc.Src;
+using Gust;
 using Microsoft.EntityFrameworkCore;
 
 namespace GustEfcConsumer
@@ -23,7 +20,7 @@ namespace GustEfcConsumer
         public ClientSaveBundle(bool pascalCase = false)
         {
             JsonSerializer = new JsonSerializer();
-
+          
             if (!pascalCase)
             {
                 JsonSerializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
