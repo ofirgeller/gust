@@ -84,7 +84,7 @@ namespace Gust.Metadata
             /// This property should be set to null if it is false so that we omit it from the response we 
             /// send the client.
             /// </summary>
-            public bool? Nullable { get; set; }
+            public bool? IsNullable { get; set; }
 
             public int? MaxLength { get; set; }
 
@@ -222,7 +222,7 @@ namespace Gust.Metadata
             {
                 Name = prop.Name,
                 EnumType = isEnum ? type.Name : null,
-                Nullable = nullable,
+                IsNullable = nullable,
                 DefaultValue = defaultValue,
                 DataType = dataType,
             };
