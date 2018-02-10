@@ -218,10 +218,10 @@ namespace Gust.Metadata
             {
                 defaultValue = "";
             }
-            
+
             return new PropertyMetadata
             {
-                Name = prop.Name,
+                Name = ToCamelCase(prop.Name),
                 EnumType = isEnum ? type.Name : null,
                 IsNullable = nullable,
                 DefaultValue = defaultValue,
@@ -242,11 +242,11 @@ namespace Gust.Metadata
 
                   if (isDependent)
                   {
-                      foreignKeyNames = n.ForeignKey.Properties.Select(p => p.Name).ToArray();
+                      foreignKeyNames = n.ForeignKey.Properties.Select(p => ToCamelCase(p.Name)).ToArray();
                   }
                   else
                   {
-                      invForeignKeyNames = n.FindInverse().ForeignKey.Properties.Select(p => p.Name).ToArray();
+                      invForeignKeyNames = n.FindInverse().ForeignKey.Properties.Select(p => ToCamelCase(p.Name)).ToArray();
                   }
 
                   return new NavigationPropertyMetadata

@@ -10,6 +10,11 @@ namespace Gust
             return longName.Split('.').Last();
         }
 
+        public static string ToCamelCase(string name)
+        {
+            return Char.ToLowerInvariant(name[0]) + name.Substring(1);
+        }
+
         public static string JsTypeNameFromType(Type type)
         {
             return type.Name + ":#" + type.Namespace;
