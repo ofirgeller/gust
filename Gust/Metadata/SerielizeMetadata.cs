@@ -1,16 +1,29 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 
 namespace Gust.Metadata
 {
     public class MetadataSerielizer
     {
+        class CamelCaseExceptDictionaryKeysResolver : CamelCasePropertyNamesContractResolver
+        {
+            protected override JsonDictionaryContract CreateDictionaryContract(Type objectType)
+            {
+                var contract = base.CreateDictionaryContract(objectType);
+
+                contract.DictionaryKeyResolver = propertyName => propertyName;
+
+                return contract;
+            }
+        }
+
         static JsonSerializerSettings DefaultSettings()
         {
             return new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
+                ContractResolver = new CamelCaseExceptDictionaryKeysResolver(),
+                NullValueHandling = NullValueHandling.Ignore,                 
             };
         }
 

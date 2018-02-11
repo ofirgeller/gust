@@ -10,17 +10,7 @@ namespace Gust.Configs
     /// </summary>
     public class GustConfig
     {
-        class CamelCaseExceptDictionaryKeysResolver : CamelCasePropertyNamesContractResolver
-        {
-            protected override JsonDictionaryContract CreateDictionaryContract(Type objectType)
-            {
-                JsonDictionaryContract contract = base.CreateDictionaryContract(objectType);
 
-                contract.DictionaryKeyResolver = propertyName => propertyName;
-
-                return contract;
-            }
-        }
 
         public static GustConfig Default { get; set; } = new GustConfig();
 
@@ -64,10 +54,7 @@ namespace Gust.Configs
         /// </summary>
         protected virtual JsonSerializerSettings CreateJsonSerializerSettings()
         {
-            var jsonSerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCaseExceptDictionaryKeysResolver(),
-            };
+            var jsonSerializerSettings = new JsonSerializerSettings();
             return UpdateWithDefaults(jsonSerializerSettings);
         }
 

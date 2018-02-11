@@ -3,6 +3,7 @@ using Gust.Metadata;
 using GustEfcConsumer.Model;
 using NUnit.Framework;
 using System;
+using System.Linq;
 
 namespace GustEfcConsumer
 {
@@ -26,6 +27,12 @@ namespace GustEfcConsumer
         {
             _metadata.StructuralTypes.Count.Should().Be(5);
             _metadata.ResourceEntityTypeMap.Count.Should().Be(5);
+
+            /// ResourceEntityTypeMap maps backend entity types to backend endpoints and breeze expects both keys and 
+            /// values to be PascalCase
+            _metadata.ResourceEntityTypeMap.Keys.Should().OnlyContain(k => char.IsUpper(k.First()));
+            _metadata.ResourceEntityTypeMap.Values.Should().OnlyContain(k => char.IsUpper(k.First()));
+
         }
 
         [Test]
