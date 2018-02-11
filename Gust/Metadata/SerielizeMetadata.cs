@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 
@@ -20,11 +21,15 @@ namespace Gust.Metadata
 
         static JsonSerializerSettings DefaultSettings()
         {
-            return new JsonSerializerSettings
+            var settings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCaseExceptDictionaryKeysResolver(),
-                NullValueHandling = NullValueHandling.Ignore,                 
+                NullValueHandling = NullValueHandling.Ignore
             };
+
+            settings.Converters.Add(new StringEnumConverter());
+
+            return settings;
         }
 
         public static string ToJson(MetadataExtractor.Metadata metadata, bool pretty = false)

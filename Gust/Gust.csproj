@@ -14,7 +14,10 @@
    values the entities hold (post save) and how their keys might have changed. this result is also compatible with the results
    the server breeze package returns</Description>
     <Version>1.0.7</Version>
-    <PackageReleaseNotes>1.0.6: fix casing of ResourceEntityTypeMap keys
+    <PackageReleaseNotes>1.0.7: 
+serelize metadata enums as strings
+plurelize resource names
+1.0.6: fix casing of ResourceEntityTypeMap keys
 1.0.5: make navigation properties names camelCase
 1.0.4: make property names camelCase
 1.0.3: add isPartOfKey to property metadata
