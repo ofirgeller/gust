@@ -13,8 +13,9 @@
  - After the save the api returns a description of the results letting the client know what are the current 
    values the entities hold (post save) and how their keys might have changed. this result is also compatible with the results
    the server breeze package returns</Description>
-    <Version>1.0.8</Version>
-    <PackageReleaseNotes>1.0.8: first version that was tested with our app and proven to work
+    <Version>1.0.9</Version>
+    <PackageReleaseNotes>1.0.9: fix key mapping entityTypeName in save results
+1.0.8: first version that was tested with our app and proven to work
 1.0.7: 
 serelize metadata enums as strings
 plurelize resource names
