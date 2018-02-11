@@ -13,6 +13,11 @@ namespace Gust
 
         public static string ToCamelCase(string name)
         {
+            if (name.Length > 1 && char.IsUpper(name[1]))
+            {
+                return name;
+            }
+
             return Char.ToLowerInvariant(name[0]) + name.Substring(1);
         }
 

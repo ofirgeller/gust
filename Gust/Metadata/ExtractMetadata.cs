@@ -81,8 +81,7 @@ namespace Gust.Metadata
             public object DefaultValue { get; set; }
 
             /// <summary>
-            /// This property should be set to null if it is false so that we omit it from the response we 
-            /// send the client.
+            /// defaults to true on the client
             /// </summary>
             public bool? IsNullable { get; set; }
 
@@ -195,7 +194,7 @@ namespace Gust.Metadata
         public static PropertyMetadata GetPropertyMetadata(IProperty prop)
         {
             var type = prop.ClrType;
-            var nullable = prop.IsNullable ? true : default(bool?);
+            var nullable = prop.IsNullable; 
             var isPartOfKey = prop.IsKey();
 
             var underliningType = Nullable.GetUnderlyingType(type);
@@ -224,7 +223,7 @@ namespace Gust.Metadata
             return new PropertyMetadata
             {
                 Name = ToCamelCase(prop.Name),
-                EnumType = isEnum ? type.Name : null,
+                EnumType = isEnum ? type.FullName : null,
                 IsNullable = nullable,
                 DefaultValue = defaultValue,
                 DataType = dataType,
@@ -234,6 +233,8 @@ namespace Gust.Metadata
 
         public static NavigationPropertyMetadata[] GetNavigationPropertiesMetadata(IEntityType entityType)
         {
+            var dataModelTypeName = entityType.ClrType.Namespace;
+
             return entityType.GetNavigations().ToList().Select(n =>
               {
                   var targetEntityType = n.GetTargetType();
@@ -251,13 +252,20 @@ namespace Gust.Metadata
                       invForeignKeyNames = n.FindInverse().ForeignKey.Properties.Select(p => ToCamelCase(p.Name)).ToArray();
                   }
 
+                  var baseAndTargetType = new[] { ShortTypeNameFromLongName(targetEntityType.Name), ShortTypeNameFromLongName(n.DeclaringEntityType.Name) }
+                  .OrderBy(i => i).ToArray();
+
+                  var associationName = baseAndTargetType[0] + "_" + baseAndTargetType[1];
+
+
                   return new NavigationPropertyMetadata
                   {
                       Name = ToCamelCase(n.Name),
-                      EntityTypeName = targetEntityType.Name,
+                      EntityTypeName = $"{ ShortTypeNameFromLongName(targetEntityType.Name)}:#{dataModelTypeName}",
                       IsScalar = isDependent,
                       ForeignKeyNames = foreignKeyNames,
-                      InvForeignKeyNames = invForeignKeyNames
+                      InvForeignKeyNames = invForeignKeyNames,
+                      AssociationName = associationName
 
                   };
               }).ToArray();
@@ -309,6 +317,7 @@ namespace Gust.Metadata
                 StructuralTypes = typesMetadate,
                 ResourceEntityTypeMap = resourceEntityTypeMap
             };
+
         }
     }
 }
