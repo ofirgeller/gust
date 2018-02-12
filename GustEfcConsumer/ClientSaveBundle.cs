@@ -15,12 +15,12 @@ namespace GustEfcConsumer
     {
         JsonSerializer JsonSerializer;
         List<EntityAspect> EntityAspects { get; set; } = new List<EntityAspect>();
-        SaveOptions SaveOptions { get; set; } = new SaveOptions{ Tag = "empty" };
+        SaveOptions SaveOptions { get; set; } = new SaveOptions { Tag = "empty" };
 
         public ClientSaveBundle(bool pascalCase = false)
         {
-            JsonSerializer = new JsonSerializer();
-          
+            JsonSerializer = new JsonSerializer { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+
             if (!pascalCase)
             {
                 JsonSerializer.ContractResolver = new CamelCasePropertyNamesContractResolver();

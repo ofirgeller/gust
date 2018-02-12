@@ -13,7 +13,7 @@ namespace GustEfcConsumer
     [TestFixture]
     public class PersistManagerTests
     {
-        [Test]
+        [SetUp]
         public void GetEntitySetsInfo_Test()
         {
             var ctx = BloggerContext.CreateWithNpgsql();
@@ -54,11 +54,8 @@ namespace GustEfcConsumer
                 .Contain(KeyValuePair.Create("Url", originalUrl as object));
         }
 
-        [Test]
-        public void PersistManager_Test()
+        public SaveResult SaveBlogAndPost(PersistManager<BloggerContext> uut)
         {
-            var uut = new PersistManager<BloggerContext>();
-
             var blog = new Blog
             {
                 Id = -1,
@@ -86,10 +83,50 @@ namespace GustEfcConsumer
 
             var saveResult = uut.SaveChanges(parsedSaveBundle.ToString());
 
+            return saveResult;
+        }
+
+        [Test]
+        public void PersistManager_Test_Add_DependentEntity()
+        {
+            var uut = new PersistManager<BloggerContext>();
+            var saveResult = SaveBlogAndPost(uut);
             var blogs = uut.Context.Blogs.ToList();
-
             saveResult.KeyMappings.Count.Should().Be(2);
+        }
 
+
+        [Test]
+        public void PersistManager_Test_Delete_DependentEntity()
+        {
+            var uut1 = new PersistManager<BloggerContext>();
+            var saveResult = SaveBlogAndPost(uut1);
+
+            var uut2 = new PersistManager<BloggerContext>();
+
+
+            var ctx = new BloggerContext();
+
+            var blogs = ctx.Blogs.ToList();
+            var posts = ctx.Posts.ToList();
+            blogs.Count.Should().BeGreaterThan(0);
+            posts.Count.Should().BeGreaterThan(0);
+
+            var blogsToDelete = blogs.Select(b => new EntityAspect(b, EntityState.Deleted)).ToList();
+            var postsToDelete = posts.Select(p => new EntityAspect(p, EntityState.Deleted)).ToList();
+
+            var saveBundle0 = new ClientSaveBundle();
+
+            blogsToDelete.ForEach(b => saveBundle0.AddEntity(b));
+            postsToDelete.ForEach(p => saveBundle0.AddEntity(p));
+
+            var parsedSaveBundle = JObject.Parse(saveBundle0.ToJson());
+
+            var saveResultOfDelete = uut2.SaveChanges(parsedSaveBundle.ToString());
+
+            var postDeleteBlogs = uut2.Context.Blogs.ToList();
+            postDeleteBlogs.Count.Should().Be(0);
+            saveResultOfDelete.DeletedKeys.Count.Should().Be(blogs.Count + posts.Count);
         }
     }
 }

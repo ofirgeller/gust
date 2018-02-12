@@ -18,7 +18,7 @@ namespace GustEfcConsumer.Model
                                           MinPoolSize=0;Timeout=20;CommandTimeout=20;PersistSecurityInfo=true";
 
         public static BloggerContext CreateWithNpgsql()
-        {        
+        {
             var options = new DbContextOptionsBuilder<BloggerContext>()
               .UseNpgsql(connectionString: pgsqlConnString)
               .Options;
@@ -69,6 +69,10 @@ namespace GustEfcConsumer.Model
         { }
 
         public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PostVote> PostVotes { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -82,7 +86,7 @@ namespace GustEfcConsumer.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if(!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseNpgsql(pgsqlConnString);
             }
