@@ -13,14 +13,14 @@
  - After the save the api returns a description of the results letting the client know what are the current 
    values the entities hold (post save) and how their keys might have changed. this result is also compatible with the results
    the server breeze package returns</Description>
-    <Version>1.1.2</Version>
-    <PackageReleaseNotes>1.1.2: handle none db generated keys in some cases
+    <Version>1.2.0</Version>
+    <PackageReleaseNotes>1.2.0: if the context is owned by gust it will start an transaction and expose it
+1.1.2: handle none db generated keys in some cases
 1.1.1: fix deleting releted entities
 1.1.0: added virtual methods to allow interference with saving entities
 1.0.9: fix key mapping entityTypeName in save results
 1.0.8: first version that was tested with our app and proven to work
-1.0.7: 
-serelize metadata enums as strings
+1.0.7: serelize metadata enums as strings
 plurelize resource names
 1.0.6: fix casing of ResourceEntityTypeMap keys
 1.0.5: make navigation properties names camelCase

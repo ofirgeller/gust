@@ -2,6 +2,7 @@
 using Gust.Keys;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,6 +17,7 @@ namespace Gust
     public partial class PersistManager<T> where T : DbContext, new()
     {
         public T Context { get; }
+        public IDbContextTransaction Transaction;
 
         static IModel _model;
         static IModel GetModel(T ctx)
@@ -105,6 +107,13 @@ namespace Gust
         {
             Context = context ?? CreateContext();
             _ownsConnection = ownsConnection;
+            if (_ownsConnection)
+            {
+                if (Context.Database.CurrentTransaction == null)
+                {
+                    Transaction = Context.Database.BeginTransaction();
+                }
+            }
         }
 
         /// <summary>
