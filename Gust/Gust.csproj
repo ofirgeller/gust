@@ -13,8 +13,9 @@
  - After the save the api returns a description of the results letting the client know what are the current 
    values the entities hold (post save) and how their keys might have changed. this result is also compatible with the results
    the server breeze package returns</Description>
-    <Version>1.2.0</Version>
-    <PackageReleaseNotes>1.2.0: if the context is owned by gust it will start an transaction and expose it
+    <Version>1.2.1</Version>
+    <PackageReleaseNotes>1.2.1: critical bug fix. original values and unmappedProps were swapped
+1.2.0: if the context is owned by gust it will start an transaction and expose it
 1.1.2: handle none db generated keys in some cases
 1.1.1: fix deleting releted entities
 1.1.0: added virtual methods to allow interference with saving entities
