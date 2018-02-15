@@ -5,15 +5,14 @@
     <PackageTags>breeze-compatible, metadata, Entity-Framework-Core, Persist, Entity-Graph</PackageTags>
     <Company>Language Zen</Company>
     <Authors>Ofir Geller</Authors>
-    <Description>This project: 
-* Provides metadata about an entity framework model in a schame that is compatible with the breeze js client
+    <Description>* Provides metadata about an entity framework model in a schame that is compatible with the breeze js client
 * Provides an API for saving a collection of entities that might be co-dependent and therefore might:
  - need to be saved in a specfic order
  - need to have their foreign keys updated after another entity is saved
  - After the save the api returns a description of the results letting the client know what are the current 
    values the entities hold (post save) and how their keys might have changed. this result is also compatible with the results
    the server breeze package returns</Description>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <PackageReleaseNotes>1.2.1: critical bug fix. original values and unmappedProps were swapped
 1.2.0: if the context is owned by gust it will start an transaction and expose it
 1.1.2: handle none db generated keys in some cases
