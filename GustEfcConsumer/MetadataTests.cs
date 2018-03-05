@@ -33,6 +33,16 @@ namespace GustEfcConsumer
             _metadata.ResourceEntityTypeMap.Keys.Should().OnlyContain(k => char.IsUpper(k.First()));
             _metadata.ResourceEntityTypeMap.Values.Should().OnlyContain(k => char.IsUpper(k.First()));
 
+            var associationNames = _metadata.StructuralTypes
+                .SelectMany(t => t.NavigationProperties.Select(np => np.AssociationName)).ToList();
+
+            var associationNameGroups = associationNames.GroupBy(an => an).ToList();
+
+            foreach (var group in associationNameGroups)
+            {
+                group.Count().Should().Be(2, $"expected group { group.First()} to appear two times");
+            }
+
         }
 
         [Test]

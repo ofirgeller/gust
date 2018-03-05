@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,5 +30,10 @@ namespace GustEfcConsumer.Model
         public long BlogId { get; set; }
 
         public Blog Blog { get; set; }
+
+        public List<Comment> Comments { get; set; }
+
+        public List<PostVote> PostVotes { get; set; }
+
     }
 }

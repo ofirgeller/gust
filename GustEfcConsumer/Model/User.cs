@@ -22,5 +22,7 @@ namespace GustEfcConsumer.Model
         public string Name { get; set; }
 
         public List<Blog> Blogs { get; set; }
+
+        public List<Comment> Comments { get; set; }
     }
 }
