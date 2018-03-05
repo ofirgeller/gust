@@ -238,25 +238,37 @@ namespace Gust.Metadata
 
             return entityType.GetNavigations().ToList().Select(n =>
               {
+                  var name = n.Name;
+
                   var targetEntityType = n.GetTargetType();
                   var isDependent = n.IsDependentToPrincipal();
+
+
 
                   string[] foreignKeyNames = null;
                   string[] invForeignKeyNames = null;
 
+                  var targetEntityName = ShortTypeNameFromLongName(targetEntityType.Name);
+                  var decleringEntityName = ShortTypeNameFromLongName(n.DeclaringEntityType.Name);
+                  var propertyNameOfDependent = isDependent ? n.Name : n.FindInverse().Name;
+
+                  var associationName = string.Empty;
+
                   if (isDependent)
                   {
                       foreignKeyNames = n.ForeignKey.Properties.Select(p => ToCamelCase(p.Name)).ToArray();
+                      associationName = targetEntityName + "_" + decleringEntityName + "__" + propertyNameOfDependent;
                   }
                   else
                   {
                       invForeignKeyNames = n.FindInverse().ForeignKey.Properties.Select(p => ToCamelCase(p.Name)).ToArray();
+                      associationName = decleringEntityName + "_" + targetEntityName + "__" + propertyNameOfDependent;
                   }
 
-                  var baseAndTargetType = new[] { ShortTypeNameFromLongName(targetEntityType.Name), ShortTypeNameFromLongName(n.DeclaringEntityType.Name) }
+                  var baseAndTargetType = new[] { targetEntityName, decleringEntityName }
                   .OrderBy(i => i).ToArray();
 
-                  var associationName = baseAndTargetType[0] + "_" + baseAndTargetType[1];
+                  //var associationName = baseAndTargetType[0] + "_" + baseAndTargetType[1];
 
 
                   return new NavigationPropertyMetadata
@@ -281,7 +293,7 @@ namespace Gust.Metadata
 
             var pk = type.FindPrimaryKey();
             var keyMetaData = GetKeyMetadata(pk);
-            if(type.Name == "LZDataBase.Model.SentenceStatus")
+            if (type.Name == "LZDataBase.Model.SentenceStatus")
             {
                 Console.WriteLine();
             }
