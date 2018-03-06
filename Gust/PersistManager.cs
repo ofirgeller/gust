@@ -14,7 +14,7 @@ using static Gust.EntityNameUtil;
 
 namespace Gust
 {
-    public partial class PersistManager<T> where T : DbContext, new()
+    public partial class PersistManager<T> : IDisposable where T : DbContext, new()
     {
         public T Context { get; }
         public IDbContextTransaction Transaction;
@@ -36,7 +36,7 @@ namespace Gust
         public SaveOptions SaveOptions { get; set; }
         public IsolationLevel? TransactionIsolationLevel { get; set; } = IsolationLevel.ReadCommitted;
 
-        bool _ownsConnection;
+        bool _ownsContext;
         GustConfig _config = new GustConfig();
 
         static IEnumerable<IEntityType> GetTypesEntityDependsOn(IEntityType et)
@@ -102,11 +102,11 @@ namespace Gust
             return _entitySetsInfo;
         }
 
-        public PersistManager(T context = null, bool ownsConnection = true)
+        public PersistManager(T context = null, bool ownsContext = true)
         {
             Context = context ?? CreateContext();
-            _ownsConnection = ownsConnection;
-            if (_ownsConnection)
+            _ownsContext = ownsContext;
+            if (_ownsContext)
             {
                 if (Context.Database.CurrentTransaction == null)
                 {
@@ -423,6 +423,25 @@ namespace Gust
                 UnmappedValuesMap = unmappedValuesMap,
                 OriginalValuesMap = originalValuesMap
             };
+        }
+
+        bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing && _ownsContext)
+                {
+                    Context?.Dispose();
+                }
+                disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
 
     }
