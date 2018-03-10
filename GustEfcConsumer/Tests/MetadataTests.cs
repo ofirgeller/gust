@@ -5,7 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace GustEfcConsumer
+namespace GustEfcConsumer.Tests
 {
     [TestFixture]
     public class MetadataTests

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GustEfcConsumer
+namespace GustEfcConsumer.Tests
 {
     [TestFixture]
     public class BlogerContextTests

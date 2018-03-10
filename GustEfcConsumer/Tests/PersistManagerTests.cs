@@ -8,50 +8,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GustEfcConsumer
+namespace GustEfcConsumer.Tests
 {
     [TestFixture]
     public class PersistManagerTests
     {
-        [SetUp]
+        [Test]
         public void GetEntitySetsInfo_Test()
         {
             var ctx = BloggerContext.CreateWithNpgsql();
             var entitySetsInfo = PersistManager<BloggerContext>.GetEntitySetsInfo(ctx);
-        }
 
-        [Test]
-        public void ClientSaveBundle_EntityAndEntityAspectToJson_Test()
-        {
-            var blog = new Blog { Url = "www.example.com" };
-            var blogEntityAspect = new EntityAspect(blog, EntityState.Added);
-
-            {
-                var uut = new ClientSaveBundle(pascalCase: false);
-                var entityWithAspectAsJson = uut.EntityAndEntityAspectToJObject(blog, blogEntityAspect).ToString();
-                entityWithAspectAsJson.Should().Contain("\"url\": \"www.example.com\",");
-                Console.WriteLine(entityWithAspectAsJson);
-            }
-
-            {
-                var uut = new ClientSaveBundle(pascalCase: true);
-                var entityWithAspectAsJson = uut.EntityAndEntityAspectToJObject(blog, blogEntityAspect).ToString();
-                entityWithAspectAsJson.Should().Contain("\"Url\": \"www.example.com\",");
-            }
-        }
-
-        [Test]
-        public void ClientSaveBundle_EntityAspect_ChangeValue_Test()
-        {
-            var originalUrl = "www.oldUrl.com";
-            var newUrl = "www.newUrl.com";
-            var blog = new Blog { Url = originalUrl };
-            var blogEntityAspect = new EntityAspect(blog, EntityState.Added);
-
-            blogEntityAspect.ChangeValue("Url", newUrl);
-            blog.Url.Should().Be(newUrl);
-            blogEntityAspect.OriginalValuesMap.Should()
-                .Contain(KeyValuePair.Create("Url", originalUrl as object));
+            entitySetsInfo.Should().HaveCount(5).And.OnlyHaveUniqueItems(esi => esi.JsName);
+            entitySetsInfo.Should().HaveCount(5).And.OnlyHaveUniqueItems(esi => esi.ClrType);
+            entitySetsInfo.Should().HaveCount(5).And.OnlyHaveUniqueItems(esi => esi.EntityType);
         }
 
         public SaveResult SaveBlogAndPost(PersistManager<BloggerContext> uut)
@@ -94,7 +64,6 @@ namespace GustEfcConsumer
             var blogs = uut.Context.Blogs.ToList();
             saveResult.KeyMappings.Count.Should().Be(2);
         }
-
 
         [Test]
         public void PersistManager_Test_Delete_DependentEntity()
