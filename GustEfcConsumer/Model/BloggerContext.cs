@@ -24,9 +24,7 @@ namespace GustEfcConsumer.Model
               .Options;
 
             var ctx = new BloggerContext(options);
-
-            ctx.Database.EnsureDeleted();
-            ctx.Database.EnsureCreated();
+                   
             return ctx;
         }
 
