@@ -187,7 +187,10 @@ namespace Gust
         /// <summary>
         /// Called after entities are saved but before the transaction is commited (if the save is inside a transaction). 
         /// </summary>
-        protected virtual void AfterSaveEntities(Dictionary<Type, List<EntityInfo>> saveMap, Dictionary<(Type, object), KeyMapping> keyMappings)
+        protected virtual void AfterSaveEntities(
+            Dictionary<Type, List<EntityInfo>> saveMap,
+            Dictionary<(Type, object), KeyMapping> keyMappings,
+            List<EntityKey> deletedKeys)
         {
 
         }
@@ -349,15 +352,18 @@ namespace Gust
                 })
                 .ToList();
 
-            AfterSaveEntities(entitiesByType, keyMappings);
+            AfterSaveEntities(entitiesByType, keyMappings, deletedKeys);
 
             Context.Database.CurrentTransaction?.Commit();
+
+            var entites = entitiesByType.SelectMany(entityGroup => entityGroup.Value.Select(ei => ei.Entity))
+                                        .ToList();
 
             return new SaveResult
             {
                 DeletedKeys = deletedKeys,
                 KeyMappings = keyMappings.Select(i => i.Value).ToList(),
-                Entities = entitiesInfo.Select(i => i.Entity).ToList(),
+                Entities = entites,
             };
         }
 

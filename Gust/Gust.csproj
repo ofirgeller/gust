@@ -12,8 +12,9 @@ Provides an API for saving a collection of entities that might be co-dependent a
  - After the save the api returns a description of the results letting the client know what are the current 
    values the entities hold (post save) and how their keys might have changed. this result is also compatible with the results
    the server breeze package returns</Description>
-    <Version>1.2.5</Version>
-    <PackageReleaseNotes>1.2.5: Fix bug where orignal values map was not being populated
+    <Version>1.2.6</Version>
+    <PackageReleaseNotes>1.2.6: Allow modifiying the saved entities and deleted keys and have that effect the final save result
+1.2.5: Fix bug where orignal values map was not being populated
 1.2.4: fix connection starvetion problem
 1.2.2: critical bug fix. fix handeling of association names when two entities have more than one association
 1.2.1: critical bug fix. original values and unmappedProps were swapped
