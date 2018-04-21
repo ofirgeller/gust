@@ -17,7 +17,10 @@ namespace Gust
     public partial class PersistManager<T> : IDisposable where T : DbContext, new()
     {
         public T Context { get; }
-        public IDbContextTransaction Transaction;
+
+        public IDbContextTransaction Transaction => Context?.Database?.CurrentTransaction;
+
+        public DbConnection GetDbConnection() => Context.Database.GetDbConnection();
 
         static IModel _model;
         static IModel GetModel(T ctx)
@@ -104,14 +107,16 @@ namespace Gust
 
         public PersistManager(T context = null, bool ownsContext = true)
         {
-            Context = context ?? CreateContext();
             _ownsContext = ownsContext;
-            if (_ownsContext)
+            if (context == null && !_ownsContext)
             {
-                if (Context.Database.CurrentTransaction == null)
-                {
-                    Transaction = Context.Database.BeginTransaction();
-                }
+                throw new Exception("If the PersistManager is not given a context it must own the context it creates for itself");
+            }
+
+            Context = context ?? CreateContext();
+            if (Context.Database.CurrentTransaction == null)
+            {
+                Context.Database.BeginTransaction();
             }
         }
 
@@ -125,11 +130,6 @@ namespace Gust
         {
             var ctx = new T();
             return ctx;
-        }
-
-        public DbConnection GetDbConnection()
-        {
-            return Context.Database.GetDbConnection();
         }
 
         protected JsonSerializer CreateJsonSerializer()
@@ -185,7 +185,7 @@ namespace Gust
         }
 
         /// <summary>
-        /// Called after entities are saved but before the transaction is commited (if the save is inside a transaction). 
+        /// Called after entities are saved but before the transaction is commited. 
         /// </summary>
         protected virtual void AfterSaveEntities(
             Dictionary<Type, List<EntityInfo>> saveMap,
@@ -354,7 +354,7 @@ namespace Gust
 
             AfterSaveEntities(entitiesByType, keyMappings, deletedKeys);
 
-            Context.Database.CurrentTransaction?.Commit();
+            Transaction?.Commit();
 
             var entites = entitiesByType.SelectMany(entityGroup => entityGroup.Value.Select(ei => ei.Entity))
                                         .ToList();
