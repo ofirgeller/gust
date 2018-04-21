@@ -1,9 +1,12 @@
 ﻿using FluentAssertions;
 using Gust;
+using Gust.Keys;
 using GustEfcConsumer.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GustEfcConsumer.Tests
@@ -175,5 +178,45 @@ namespace GustEfcConsumer.Tests
             postDeleteBlogs.Count.Should().Be(0);
             saveResultOfDelete.DeletedKeys.Count.Should().Be(blogs.Count + posts.Count);
         }
+
+
+        public class InheritingPersistManager : PersistManager<BloggerContext>
+        {
+            protected override void AfterSaveEntities(Dictionary<Type, List<EntityInfo>> saveMap, Dictionary<(Type, object), KeyMapping> keyMappings, List<EntityKey> deletedKeys)
+            {
+                throw new Exception();
+            }
+        }
+
+
+        [Test, Order(1)]
+        public void PersistManager_WhenAfterSaveEntitiesthrows_ChangesAreRolledBack()
+        {
+            var uut = new InheritingPersistManager();
+
+            var blogUrl = "www.shouldNotBEsAVED.com";
+
+            var blog = new Blog
+            {
+                Id = -1,
+                Url = blogUrl
+            };
+
+            var blogEntityAspect = new EntityAspect(blog, EntityState.Added);
+
+            var saveBundle0 = new ClientSaveBundle();
+
+            saveBundle0.AddEntity(blogEntityAspect);
+
+            var parsedSaveBundle = JObject.Parse(saveBundle0.ToJson());
+
+            uut.Invoking((m) => m.SaveChanges(parsedSaveBundle.ToString()))
+               .Should().Throw<Exception>();
+
+            var ctx = new BloggerContext();
+            ctx.Blogs.FirstOrDefault(b => b.Url == blogUrl).Should().BeNull();
+        }
+
+
     }
 }
