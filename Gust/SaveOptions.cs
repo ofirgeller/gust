@@ -1,4 +1,6 @@
-﻿namespace Gust
+﻿using Newtonsoft.Json.Linq;
+
+namespace Gust
 {
     /// <summary>
     /// Extra options the client can send along with the save payload. currently Tag is used as a flag to "force" save 
@@ -7,6 +9,6 @@
     /// </summary>
     public class SaveOptions
     {
-        public object Tag { get; set; }
+        public JObject Tag { get; set; }
     }
 }

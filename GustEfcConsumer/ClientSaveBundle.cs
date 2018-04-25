@@ -16,7 +16,7 @@ namespace GustEfcConsumer
     {
         JsonSerializer JsonSerializer;
         List<EntityAspect> EntityAspects { get; set; } = new List<EntityAspect>();
-        SaveOptions SaveOptions { get; set; } = new SaveOptions { Tag = "empty" };
+        SaveOptions SaveOptions { get; set; } = new SaveOptions { Tag = JObject.Parse("{}") };
 
         public ClientSaveBundle(bool pascalCase = false)
         {

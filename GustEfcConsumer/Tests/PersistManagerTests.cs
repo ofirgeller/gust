@@ -217,6 +217,5 @@ namespace GustEfcConsumer.Tests
             ctx.Blogs.FirstOrDefault(b => b.Url == blogUrl).Should().BeNull();
         }
 
-
     }
 }
