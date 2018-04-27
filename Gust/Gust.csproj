@@ -12,8 +12,9 @@ Provides an API for saving a collection of entities that might be co-dependent a
  - After the save the api returns a description of the results letting the client know what are the current 
    values the entities hold (post save) and how their keys might have changed. this result is also compatible with the results
    the server breeze package returns</Description>
-    <Version>2.0.0</Version>
-    <PackageReleaseNotes>2.0.0: the tag property inside save options is now expected to be an object
+    <Version>2.0.1</Version>
+    <PackageReleaseNotes>2.0.1: fix wrong entity type name in deleted key
+2.0.0: the tag property inside save options is now expected to be an object
 1.2.6: Allow modifiying the saved entities and deleted keys and have that effect the final save result
 1.2.5: Fix bug where orignal values map was not being populated
 1.2.4: fix connection starvetion problem

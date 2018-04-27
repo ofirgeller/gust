@@ -3,9 +3,9 @@
     public class EntityKey
     {
         public EntityKey() { }
-        public EntityKey(object entity, object key)
+        public EntityKey(EntityInfo entity, object key)
         {
-            var type = entity.GetType();
+            var type = entity.Entity.GetType();
             EntityTypeName = type.Name + ":#" + type.Namespace;
             KeyValue = key;
         }
