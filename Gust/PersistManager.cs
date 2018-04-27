@@ -356,8 +356,19 @@ namespace Gust
 
             Transaction?.Commit();
 
-            var entites = entitiesByType.SelectMany(entityGroup => entityGroup.Value.Select(ei => ei.Entity))
-                                        .ToList();
+            var entites = entitiesByType.SelectMany(entityGroup => entityGroup.Value.Select((ei) =>
+            {
+                if (ei.EntityState == EntityState.Deleted)
+                {
+                    foreach (var item in ei.EntitySetInfo.EntityType.GetNavigations())
+                    {
+                        item.PropertyInfo.SetValue(ei.Entity, null);
+                    }
+                }
+
+                return ei.Entity;
+            }))
+            .ToList();
 
             return new SaveResult
             {

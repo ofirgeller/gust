@@ -179,7 +179,6 @@ namespace GustEfcConsumer.Tests
             saveResultOfDelete.DeletedKeys.Count.Should().Be(blogs.Count + posts.Count);
         }
 
-
         public class InheritingPersistManager : PersistManager<BloggerContext>
         {
             protected override void AfterSaveEntities(Dictionary<Type, List<EntityInfo>> saveMap, Dictionary<(Type, object), KeyMapping> keyMappings, List<EntityKey> deletedKeys)
@@ -187,7 +186,6 @@ namespace GustEfcConsumer.Tests
                 throw new Exception();
             }
         }
-
 
         [Test, Order(1)]
         public void PersistManager_WhenAfterSaveEntitiesthrows_ChangesAreRolledBack()
