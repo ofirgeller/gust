@@ -358,6 +358,10 @@ namespace Gust
 
             var entites = entitiesByType.SelectMany(entityGroup => entityGroup.Value.Select((ei) =>
             {
+                /// If we do not remove the navigation props from deleted entities the related entities have a chance of getting
+                /// derealized under a deleted entites (with the entities arrray holding just just a json id ref) 
+                /// the breeze client does not process entities that are connected to deleted entities so we have to remove the
+                /// related entities refs.
                 if (ei.EntityState == EntityState.Deleted)
                 {
                     foreach (var item in ei.EntitySetInfo.EntityType.GetNavigations())
