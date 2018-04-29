@@ -206,7 +206,7 @@ namespace Gust
             return true;
         }
 
-        public SaveResult SaveChanges(string saveBundle)
+        public virtual SaveResult SaveChanges(string saveBundle)
         {
             var ser = CreateJsonSerializer();
 
