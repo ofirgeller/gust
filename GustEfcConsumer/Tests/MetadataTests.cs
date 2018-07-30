@@ -25,8 +25,8 @@ namespace GustEfcConsumer.Tests
         [Test]
         public void Metadata_Test()
         {
-            _metadata.StructuralTypes.Count.Should().Be(5);
-            _metadata.ResourceEntityTypeMap.Count.Should().Be(5);
+            _metadata.StructuralTypes.Count.Should().Be(6);
+            _metadata.ResourceEntityTypeMap.Count.Should().Be(6);
 
             /// ResourceEntityTypeMap maps backend entity types to backend endpoints and breeze expects both keys and 
             /// values to be PascalCase

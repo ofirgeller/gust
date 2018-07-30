@@ -19,7 +19,7 @@ namespace GustEfcConsumer.Model
         [Key]
         public int Id { get; set; }
                 
-        public long PostId { get; set; }
+        public int PostId { get; set; }
 
         public bool Positive { get; set; }
 

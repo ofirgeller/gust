@@ -24,7 +24,7 @@ namespace GustEfcConsumer.Model
               .Options;
 
             var ctx = new BloggerContext(options);
-                   
+
             return ctx;
         }
 
@@ -68,6 +68,7 @@ namespace GustEfcConsumer.Model
 
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<PostAudit> PostAudits { get; set; }
         public DbSet<PostVote> PostVotes { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<User> Users { get; set; }
@@ -77,6 +78,7 @@ namespace GustEfcConsumer.Model
             modelBuilder.Entity<Comment>();
             modelBuilder.Entity<Blog>();
             modelBuilder.Entity<Post>();
+            modelBuilder.Entity<PostAudit>();
             modelBuilder.Entity<PostVote>();
             modelBuilder.Entity<User>();
 

@@ -243,14 +243,18 @@ namespace Gust.Metadata
                   var targetEntityType = n.GetTargetType();
                   var isDependent = n.IsDependentToPrincipal();
 
-
-
                   string[] foreignKeyNames = null;
                   string[] invForeignKeyNames = null;
 
                   var targetEntityName = ShortTypeNameFromLongName(targetEntityType.Name);
                   var decleringEntityName = ShortTypeNameFromLongName(n.DeclaringEntityType.Name);
-                  var propertyNameOfDependent = isDependent ? n.Name : n.FindInverse().Name;
+                  var propertyNameOfDependent = isDependent ? n.Name : n.FindInverse()?.Name;
+
+                  if (propertyNameOfDependent == null)
+                  {
+                      throw new Exception
+                      ($"unable to find the inverse navigation property of the {n.Name} navigation property of of type {entityType.Name}");
+                  }
 
                   var associationName = string.Empty;
 
@@ -267,9 +271,6 @@ namespace Gust.Metadata
 
                   var baseAndTargetType = new[] { targetEntityName, decleringEntityName }
                   .OrderBy(i => i).ToArray();
-
-                  //var associationName = baseAndTargetType[0] + "_" + baseAndTargetType[1];
-
 
                   return new NavigationPropertyMetadata
                   {
@@ -293,10 +294,6 @@ namespace Gust.Metadata
 
             var pk = type.FindPrimaryKey();
             var keyMetaData = GetKeyMetadata(pk);
-            if (type.Name == "LZDataBase.Model.SentenceStatus")
-            {
-                Console.WriteLine();
-            }
 
             var keysAreAllForeignkeysOrMarkedNone = pk.Properties.All((p) =>
             {

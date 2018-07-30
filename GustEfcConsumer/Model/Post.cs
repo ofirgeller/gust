@@ -35,5 +35,6 @@ namespace GustEfcConsumer.Model
 
         public List<PostVote> PostVotes { get; set; }
 
+        public List<PostAudit> Versions { get; set; }
     }
 }

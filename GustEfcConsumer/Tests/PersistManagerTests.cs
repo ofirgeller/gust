@@ -74,9 +74,9 @@ namespace GustEfcConsumer.Tests
         {
             var entitySetsInfo = UUT.GetEntitySetsInfo();
 
-            entitySetsInfo.Should().HaveCount(5).And.OnlyHaveUniqueItems(esi => esi.JsName);
-            entitySetsInfo.Should().HaveCount(5).And.OnlyHaveUniqueItems(esi => esi.ClrType);
-            entitySetsInfo.Should().HaveCount(5).And.OnlyHaveUniqueItems(esi => esi.EntityType);
+            entitySetsInfo.Should().HaveCount(6).And.OnlyHaveUniqueItems(esi => esi.JsName);
+            entitySetsInfo.Should().HaveCount(6).And.OnlyHaveUniqueItems(esi => esi.ClrType);
+            entitySetsInfo.Should().HaveCount(6).And.OnlyHaveUniqueItems(esi => esi.EntityType);
         }
 
         [Test]

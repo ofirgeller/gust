@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using static Gust.EntityNameUtil;
 
@@ -278,19 +279,26 @@ namespace Gust
                 {
                     var principalEntityType = fk.PrincipalEntityType.ClrType;
 
-                    var fkProp = fk.Properties.First();
-                    var fkPropInfo = fkProp.PropertyInfo;
+                    var fkProp = fk.Properties.FirstOrDefault();
+                    var fkPropInfo = fkProp?.PropertyInfo;
 
-                    entities.ForEach(ei =>
+                    if (fkPropInfo == null)
                     {
-                        var keyValue = fkPropInfo.GetValue(ei.Entity);
-
-                        if (keyMappings.TryGetValue((principalEntityType, keyValue), out var keyMapping))
+                        Trace.TraceWarning($"No key field is defined on the inverse entity to the navigation property of type {principalEntityType.Name}");
+                    }
+                    else
+                    {
+                        entities.ForEach(ei =>
                         {
-                            fkPropInfo.SetValue(ei.Entity, keyMapping.RealValue);
-                        }
+                            var keyValue = fkPropInfo.GetValue(ei.Entity);
 
-                    });
+                            if (keyMappings.TryGetValue((principalEntityType, keyValue), out var keyMapping))
+                            {
+                                fkPropInfo.SetValue(ei.Entity, keyMapping.RealValue);
+                            }
+                        });
+                    }
+
                 }
 
                 var pkPropInfo = setInfo.EntityType.GetKeys().First().Properties.First().PropertyInfo;
