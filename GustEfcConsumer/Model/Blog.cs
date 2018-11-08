@@ -13,7 +13,6 @@ namespace GustEfcConsumer.Model
             return new Blog
             {
                 Url = "www.blog.com",
-                CreatedAt = DateTime.UtcNow
             };
         }
 

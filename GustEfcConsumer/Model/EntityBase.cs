@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 
 namespace GustEfcConsumer.Model
 {
@@ -7,6 +8,6 @@ namespace GustEfcConsumer.Model
     /// </summary>
     public class EntityBase
     {
-        public DateTime CreatedAt { get; set; }
+        public Instant CreatedAt { get; set; } = Instant.FromUtc(2000, 10, 8, 6, 4);
     }
 }

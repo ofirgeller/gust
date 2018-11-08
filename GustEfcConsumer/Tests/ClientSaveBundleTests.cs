@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using GustEfcConsumer.Model;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace GustEfcConsumer.Tests
         [Test]
         public void ClientSaveBundle_EntityAndEntityAspectToJson_Test()
         {
-            var blog = new Blog { Url = "www.example.com" };
+            var blog = new Blog { Url = "www.example.com", CreatedAt = Instant.FromUtc(2002, 10, 8, 6, 4) };
             var blogEntityAspect = new EntityAspect(blog, EntityState.Added);
 
             {

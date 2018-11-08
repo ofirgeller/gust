@@ -16,7 +16,7 @@ namespace GustEfcConsumer.Tests
         [OneTimeSetUp]
         public void Setup()
         {
-            var ctx = BloggerContext.CreateWithSqliteProvider("EFPersistManager");
+            var ctx = BloggerContextSqlite.Create("EFPersistManager");
             _metadata = MetadataExtractor.GetMetadata(ctx);
             _metadataAsJson = MetadataSerielizer.ToJson(_metadata, true);
             Console.WriteLine(_metadataAsJson);

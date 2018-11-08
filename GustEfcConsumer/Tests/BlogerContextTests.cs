@@ -13,7 +13,7 @@ namespace GustEfcConsumer.Tests
         [Test]
         public void GetEntityTypeSaveOrder_Test()
         {
-            var ctx = BloggerContext.CreateWithNpgsql();
+            var ctx = BloggerContextPg.CreateWithNpgsql();
             var saveOrder = DecideSaveOrder(ctx);
             saveOrder = DecideSaveOrder(ctx);
             saveOrder = DecideSaveOrder(ctx);

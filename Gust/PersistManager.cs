@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using static Gust.EntityNameUtil;
 
@@ -133,10 +134,22 @@ namespace Gust
             return ctx;
         }
 
-        protected JsonSerializer CreateJsonSerializer()
+        protected JsonSerializerSettings _jsonSerializerSettings;
+
+        protected virtual JsonSerializerSettings GetSerializerSettings()
+        {
+            if (_jsonSerializerSettings == null)
+            {
+                _jsonSerializerSettings = GustConfig.Default.GetJsonSerializerSettingsForSave();
+            }
+
+            return _jsonSerializerSettings;
+        }
+
+        JsonSerializer CreateJsonSerializer()
         {
             var serializerSettings = GustConfig.Default.GetJsonSerializerSettingsForSave();
-            var jsonSerializer = JsonSerializer.Create(serializerSettings);
+            var jsonSerializer = JsonSerializer.Create(GetSerializerSettings());
             return jsonSerializer;
         }
 
@@ -211,9 +224,11 @@ namespace Gust
         {
             var ser = CreateJsonSerializer();
 
-            var jSaveBundle = JObject.Parse(saveBundle);
-
-            var saveOptions = new SaveOptions();
+            // This way of parsing does not convert the dates from strings to something else, making it possible to use
+            // nodatime if the serealizer was configured to handle it.
+            var reader = new JsonTextReader(new StringReader(saveBundle));
+       
+            var jSaveBundle = ser.Deserialize<JObject>(reader);
 
             if (jSaveBundle.TryGetValue("saveOptions", out var saveOptionsJson))
             {
@@ -393,6 +408,7 @@ namespace Gust
         public EntityInfo EntityInfoFromJsonToken(JToken e, JsonSerializer ser = null, List<EntitySetInfo> entitySetsInfo = null)
         {
             ser = ser ?? CreateJsonSerializer();
+
             entitySetsInfo = entitySetsInfo ?? GetEntitySetsInfo();
             var entityVal = e as JObject;
 

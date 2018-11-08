@@ -14,7 +14,6 @@ namespace GustEfcConsumer.Model
             {
                 Title = "Go Fish!",
                 Content = "This is how you fish a fish",
-                CreatedAt = DateTime.UtcNow,
             };
         }
 

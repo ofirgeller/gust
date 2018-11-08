@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
+using NodaTime.Serialization.JsonNet;
+using NodaTime;
 
 namespace GustEfcConsumer
 {
@@ -20,8 +22,15 @@ namespace GustEfcConsumer
 
         public ClientSaveBundle(bool pascalCase = false)
         {
-            JsonSerializer = new JsonSerializer { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            };
 
+            jsonSerializerSettings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+
+            JsonSerializer = JsonSerializer.Create(jsonSerializerSettings);
+            
             if (!pascalCase)
             {
                 JsonSerializer.ContractResolver = new CamelCasePropertyNamesContractResolver();

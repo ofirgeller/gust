@@ -3,14 +3,32 @@ using Gust;
 using Gust.Keys;
 using GustEfcConsumer.Model;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NodaTime;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NodaTime.Serialization.JsonNet;
 
 namespace GustEfcConsumer.Tests
 {
+    public class PersistManagerWithNoda : PersistManager<BloggerContextPg>
+    {
+        public override BloggerContextPg CreateContext()
+        {
+            return BloggerContextPg.CreateWithNpgsql();
+        }
+
+        protected override JsonSerializerSettings  GetSerializerSettings()
+        {
+            var settings = base.GetSerializerSettings();
+            settings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+            return settings;
+        }
+    }
+
     /// <summary>
     /// Notice that the tests that depend on the data in the database (vs the scheme) 
     /// have an order attiribute, this allows us to not have to recreate the
@@ -19,25 +37,22 @@ namespace GustEfcConsumer.Tests
     [TestFixture]
     public class PersistManagerTests
     {
-        PersistManager<BloggerContext> UUT;
-        PersistManager<BloggerContext> UutWithGivenCtx;
+        PersistManager<BloggerContextPg> UUT;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             /// make sure w have a fresh  and empty DB .  
-            using (var setupCtx = new BloggerContext())
+            using (var setupCtx = new BloggerContextPg())
             {
                 setupCtx.Database.EnsureDeleted();
                 setupCtx.Database.EnsureCreated();
             }
 
-            UUT = new PersistManager<BloggerContext>();
-            var ctxTheManagerDoesNotOwn = BloggerContext.CreateWithNpgsql();
-            UutWithGivenCtx = new PersistManager<BloggerContext>(ctxTheManagerDoesNotOwn);
+            UUT = new PersistManagerWithNoda();
         }
 
-        SaveResult InsertTestDataBaseLineIntoDb(PersistManager<BloggerContext> uut)
+        SaveResult InsertTestDataBaseLineIntoDb(PersistManager<BloggerContextPg> uut)
         {
             var blog = new Blog
             {
@@ -52,7 +67,8 @@ namespace GustEfcConsumer.Tests
                 BlogId = -1,
                 Content = "I am content",
                 Id = -2,
-                Title = "this is the title"
+                Title = "this is the title",
+                CreatedAt = Instant.FromUtc(2002, 10, 8, 6, 4)
             };
 
             var postEntityAspect = new EntityAspect(post, EntityState.Added);
@@ -153,9 +169,9 @@ namespace GustEfcConsumer.Tests
         [Test, Order(1)]
         public void PersistManager_Delete_DependentEntity()
         {
-            var uut = new PersistManager<BloggerContext>();
+            var uut = new PersistManager<BloggerContextPg>();
 
-            var ctx = new BloggerContext();
+            var ctx = new BloggerContextPg();
 
             var blogs = ctx.Blogs.ToList();
             var posts = ctx.Posts.ToList();
@@ -179,7 +195,7 @@ namespace GustEfcConsumer.Tests
             saveResultOfDelete.DeletedKeys.Count.Should().Be(blogs.Count + posts.Count);
         }
 
-        public class InheritingPersistManager : PersistManager<BloggerContext>
+        public class InheritingPersistManager : PersistManager<BloggerContextPg>
         {
             protected override void AfterSaveEntities(Dictionary<Type, List<EntityInfo>> saveMap, Dictionary<(Type, object), KeyMapping> keyMappings, List<EntityKey> deletedKeys)
             {
@@ -211,7 +227,7 @@ namespace GustEfcConsumer.Tests
             uut.Invoking((m) => m.SaveChanges(parsedSaveBundle.ToString()))
                .Should().Throw<Exception>();
 
-            var ctx = new BloggerContext();
+            var ctx = new BloggerContextPg();
             ctx.Blogs.FirstOrDefault(b => b.Url == blogUrl).Should().BeNull();
         }
 

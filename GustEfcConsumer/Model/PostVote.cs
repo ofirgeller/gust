@@ -11,7 +11,6 @@ namespace GustEfcConsumer.Model
         {
             return new PostVote
             {
-                CreatedAt = DateTime.UtcNow,
                 Positive = true
             };
         }
