@@ -12,8 +12,9 @@ Provides an API for saving a collection of entities that might be co-dependent a
  - After the save the api returns a description of the results letting the client know what are the current 
    values the entities hold (post save) and how their keys might have changed. this result is also compatible with the results
    the server breeze package returns</Description>
-    <Version>2.0.3.0</Version>
-    <PackageReleaseNotes>2.0.3.0: serealizer settings can be set by users
+    <Version>2.0.4.0</Version>
+    <PackageReleaseNotes>2.0.4.0: entities added during "BeforeSaveEntities" will have correct key mappings
+2.0.3.0: serealizer settings can be set by users
 2.0.2.2: exception messages improvment, try to ignore missing inverse fk
 2.0.2.1: allow overriding the save changes method
 2.0.1: fix wrong entity type name in deleted key
