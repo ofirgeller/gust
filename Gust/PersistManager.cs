@@ -42,7 +42,6 @@ namespace Gust
         public IsolationLevel? TransactionIsolationLevel { get; set; } = IsolationLevel.ReadCommitted;
 
         bool _ownsContext;
-        GustConfig _config = new GustConfig();
 
         static IEnumerable<IEntityType> GetTypesEntityDependsOn(IEntityType et)
         {
@@ -107,15 +106,20 @@ namespace Gust
             return _entitySetsInfo;
         }
 
-        public PersistManager(T context = null, bool ownsContext = true)
+        public PersistManager()
         {
-            _ownsContext = ownsContext;
-            if (context == null && !_ownsContext)
-            {
-                throw new Exception("If the PersistManager is not given a context it must own the context it creates for itself");
-            }
+            _ownsContext = true;
+            Context = CreateContext();
+            Context.Database.BeginTransaction();
+        }
 
-            Context = context ?? CreateContext();
+        /// <summary>
+        /// If using this ctor the context must be disposed of by the caller since it will not be owned by the PersistManager
+        /// </summary>
+        public PersistManager(T context)
+        {
+            Context = context ?? throw new NullReferenceException("context might not be null, you can call the ctor that does not require a context");
+
             if (Context.Database.CurrentTransaction == null)
             {
                 Context.Database.BeginTransaction();
@@ -148,7 +152,6 @@ namespace Gust
 
         JsonSerializer CreateJsonSerializer()
         {
-            var serializerSettings = GustConfig.Default.GetJsonSerializerSettingsForSave();
             var jsonSerializer = JsonSerializer.Create(GetSerializerSettings());
             return jsonSerializer;
         }
@@ -227,7 +230,7 @@ namespace Gust
             // This way of parsing does not convert the dates from strings to something else, making it possible to use
             // nodatime if the serealizer was configured to handle it.
             var reader = new JsonTextReader(new StringReader(saveBundle));
-       
+
             var jSaveBundle = ser.Deserialize<JObject>(reader);
 
             if (jSaveBundle.TryGetValue("saveOptions", out var saveOptionsJson))
@@ -250,6 +253,12 @@ namespace Gust
 
             }).ToList();
 
+
+            var entitiesByType = entitiesInfo.GroupBy(e => e.Type)
+                .ToDictionary(i => i.Key, i => i.ToList());
+
+            BeforeSaveEntities(entitiesByType);
+
             var plannedForDeletion = entitiesInfo.Where(ei => ei.EntityState == EntityState.Deleted).ToList();
 
             var keyMappings = entitiesInfo
@@ -265,10 +274,6 @@ namespace Gust
                      return new KeyMapping { TempValue = keyValue, EntityTypeName = i.Type.FullName };
                  });
 
-            var entitiesByType = entitiesInfo.GroupBy(e => e.Type)
-                .ToDictionary(i => i.Key, i => i.ToList());
-
-            BeforeSaveEntities(entitiesByType);
 
             entitiesInfo = entitiesByType.SelectMany(i => i.Value).ToList();
 
