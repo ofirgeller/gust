@@ -21,7 +21,7 @@ namespace GustEfcConsumer.Tests
             return BloggerContextPg.CreateWithNpgsql();
         }
 
-        protected override JsonSerializerSettings  GetSerializerSettings()
+        protected override JsonSerializerSettings GetSerializerSettings()
         {
             var settings = base.GetSerializerSettings();
             settings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
@@ -195,7 +195,7 @@ namespace GustEfcConsumer.Tests
             saveResultOfDelete.DeletedKeys.Count.Should().Be(blogs.Count + posts.Count);
         }
 
-        public class InheritingPersistManager : PersistManager<BloggerContextPg>
+        public class ErrorAfterSavePersistManager : PersistManager<BloggerContextPg>
         {
             protected override void AfterSaveEntities(Dictionary<Type, List<EntityInfo>> saveMap, Dictionary<(Type, object), KeyMapping> keyMappings, List<EntityKey> deletedKeys)
             {
@@ -206,7 +206,7 @@ namespace GustEfcConsumer.Tests
         [Test, Order(1)]
         public void PersistManager_WhenAfterSaveEntitiesthrows_ChangesAreRolledBack()
         {
-            var uut = new InheritingPersistManager();
+            var uut = new ErrorAfterSavePersistManager();
 
             var blogUrl = "www.shouldNotBEsAVED.com";
 
@@ -231,5 +231,58 @@ namespace GustEfcConsumer.Tests
             ctx.Blogs.FirstOrDefault(b => b.Url == blogUrl).Should().BeNull();
         }
 
+        public class EntityAddingBeforeSavePersistManager : PersistManager<BloggerContextPg>
+        {
+            protected override JsonSerializerSettings GetSerializerSettings()
+            {
+                var settings = base.GetSerializerSettings();
+
+                settings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+                return settings;
+            }
+
+            protected override void BeforeSaveEntities(Dictionary<Type, List<EntityInfo>> saveMap)
+            {
+                saveMap.TryGetValue(typeof(Blog), out var blogs);
+                var blog = blogs.First().Entity as Blog;
+                var post = new Post { BlogId = blog.Id, Title = "post1 title", Content = "here is content!" };
+                saveMap.Add(typeof(Post), new List<EntityInfo> { CreateEntityInfo(post, EntityState.Added) });
+            }
+
+        }
+
+
+        /// <summary>
+        /// Tests that entities added during the call to "BeforeSaveEntities" are also saved and have their keys correctly mapped.
+        /// </summary>
+        [Test, Order(2)]
+        public void PersistManager_Saves_Entities_Added_By_BeforeSaveEntities()
+        {
+            var uut = new EntityAddingBeforeSavePersistManager();
+
+            var blogUrl = "www.blogWithRelateadEntitiesCreatedIn_BeforeSaveEntities.com";
+
+            var blog = new Blog
+            {
+                Id = -2,
+                Url = blogUrl,
+                CreatedAt = Instant.FromDateTimeUtc(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc))
+            };
+
+            var blogEntityAspect = new EntityAspect(blog, EntityState.Added);
+
+            var saveBundle0 = new ClientSaveBundle();
+
+            saveBundle0.AddEntity(blogEntityAspect);
+
+            var parsedSaveBundle = JObject.Parse(saveBundle0.ToJson());
+
+            uut.SaveChanges(parsedSaveBundle.ToString());
+
+            var ctx = new BloggerContextPg();
+            var savedBlog = ctx.Blogs.FirstOrDefault(b => b.Url == blogUrl);
+            savedBlog.Should().NotBeNull();
+            ctx.Posts.FirstOrDefault(p => p.BlogId == savedBlog.Id).Should().NotBeNull();
+        }
     }
 }
