@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using NodaTime;
+using System;
 
 namespace GustEfcConsumer.Model
 {
@@ -161,7 +162,10 @@ namespace GustEfcConsumer.Model
         public static BloggerContextPg CreateWithNpgsql()
         {
             var options = new DbContextOptionsBuilder<BloggerContextPg>()
-              .UseNpgsql(connectionString: pgsqlConnString, o => o.UseNodaTime())
+              .UseNpgsql(connectionString: pgsqlConnString, o =>
+              {
+                  o.UseNodaTime().SetPostgresVersion(new Version(9, 6));
+              })
               .Options;
 
             var ctx = new BloggerContextPg(options);
@@ -198,7 +202,10 @@ namespace GustEfcConsumer.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql(pgsqlConnString, o => o.UseNodaTime());
+                optionsBuilder.UseNpgsql(pgsqlConnString, o =>
+                {
+                    o.UseNodaTime().SetPostgresVersion(new Version(9, 6));
+                });
             }
         }
     }

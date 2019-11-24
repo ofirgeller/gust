@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
     <RootNamespace>GustConsumer</RootNamespace>
@@ -20,19 +20,19 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.4.2" />
     <PackageReference Include="Microsoft.Data.SQLite" Version="2.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="NodaTime" Version="2.4.2" />
+    <PackageReference Include="NodaTime" Version="2.4.7" />
     <PackageReference Include="NodaTime.Serialization.JsonNet" Version="2.0.0" />
-    <PackageReference Include="Npgsql" Version="4.0.3" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="2.1.1" />
-    <PackageReference Include="Npgsql.NodaTime" Version="1.0.0" />
+    <PackageReference Include="Npgsql" Version="4.1.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="3.0.1" />
+    <PackageReference Include="Npgsql.NodaTime" Version="4.1.2" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
